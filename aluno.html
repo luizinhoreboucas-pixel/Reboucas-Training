@@ -7,7 +7,7 @@
 <meta name="description" content="Treinos, timer e acompanhamento — Rebouças Training">
 <meta property="og:title" content="Rebouças Training">
 <meta property="og:description" content="Seus treinos, timer e evolução. Toque para entrar.">
-<meta property="og:image" content="https://reboucas-training.netlify.app/logo.png">
+<meta property="og:image" content="https://reboucas-training.vercel.app/logo.png">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#141414">
 <link rel="icon" href="logo.png">
@@ -949,7 +949,7 @@ function cCfg(){
    '<label class="lab" for="s_name">Seu nome</label><input class="in" id="s_name" data-b="s|main|coachName" value="'+esc(s.coachName||'')+'" placeholder="Ex.: Luis Rebouças">'+
    '<label class="lab" for="s_wa">WhatsApp para receber os resumos</label><input class="in" id="s_wa" data-b="s|main|whatsapp" value="'+esc(s.whatsapp||'')+'" inputmode="tel" placeholder="351912345678">'+
    '<p class="hint">Com código do país, só números. Os alunos que não conseguirem salvar online enviam o resumo direto para este número.</p>'+
-   '<label class="lab" for="s_link">Link desta app</label><input class="in" id="s_link" data-b="s|main|appLink" value="'+esc(s.appLink||'')+'" placeholder="https://reboucas-training.netlify.app">'+
+   '<label class="lab" for="s_link">Link desta app</label><input class="in" id="s_link" data-b="s|main|appLink" value="'+esc(s.appLink||'')+'" placeholder="https://reboucas-training.vercel.app">'+
    '<p class="hint">Deixe vazio para usar o link atual da app.</p>'+
    '<label class="lab">Link do aluno (só painel do aluno)</label><div class="copybox">'+esc(studentLink())+'</div><button class="btn sm" style="margin-top:8px" data-act="copyLink">'+ic('copy')+' Copiar link do aluno</button>'+
    '<p class="hint">Este link abre a página do aluno (aluno.html): só entrada por código e painel do aluno, sem nenhum acesso ao painel do treinador. É ele que vai no convite.</p></div>'+
@@ -1519,7 +1519,7 @@ async function init(){
     cloudOn=true;
     const timer=setTimeout(()=>{if(!loaded){loadNote='Os dados ainda não carregaram — verifique a conexão.';render()}},10000);
     const pending=new Set(COLS);
-    COLS.forEach(c=>{try{db.collection(c).onSnapshot(s=>{const o={};s.docs.forEach(x=>{if(x.exists!==false)o[x.id]=x.data()});CLOUD[c]=o;inv();
+    COLS.forEach(c=>{try{db.collection(c).onSnapshot({includeMetadataChanges:true},s=>{const o={};s.docs.forEach(x=>{if(x.exists!==false)o[x.id]=x.data()});CLOUD[c]=o;inv();
         if(!s.metadata||!s.metadata.fromCache){pending.delete(c);if(!pending.size&&!loaded){loaded=true;loadNote='';clearTimeout(timer)}}
         if(UI.role==='login'&&UI.aid&&getD('athletes',UI.aid))UI.role='athlete';
         if(loaded)softRender();else render()},err=>{pending.delete(c);if(!pending.size){loaded=true;clearTimeout(timer)}if(err&&err.code==='revoked')cloudOn=false;render()})}catch(e){pending.delete(c)}});
